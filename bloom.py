@@ -725,6 +725,7 @@ def view_order():
                 codes = input("Please enter a order code you want to check or 0 to go back: ")
                 if codes == "0":
                     view_order()
+                    return
                 else:
                     for order in order_code:
                         if codes != order["code"]:
