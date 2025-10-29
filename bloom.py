@@ -1,5 +1,6 @@
 import datetime
 
+ordered_item_code = []
 order_summary = []
 menus = {}
 code_list = []
@@ -8,39 +9,48 @@ detail = {}
 order_code = []
 
 current_menu = None
-try:
-    with open('product.txt', 'r') as file:
-        for line in file:
-            line = line.strip()
-            if not line:
-                continue
-            
-            if line.startswith("menu"):
-                current_menu = line.split()[1]
-                menus[current_menu] = []
-            else:
-                parts = line.split(',')
-                if len(parts) >= 6:
-                    menus[current_menu].append({
-                        'code': parts[0],
-                        'name': parts[1],
-                        'category': parts[2],
-                        'price': parts[3],
-                        'rate': parts[4],
-                        'status': parts[5]
-                    })
-except FileNotFoundError:
-    print(f"File not found.")
 
-def aline(product, name):
+with open('product.txt', 'r') as file: 
+    for line in file:
+        line = line.strip()
+        if not line:
+            continue
+        
+        if line.startswith("menu"):
+            current_menu = line.split()[1]
+            menus[current_menu] = []
+        else:
+            parts = line.split(',') # split every product to 6 part
+            if len(parts) == 6: # make sure very product got 6 part
+                menus[current_menu].append({
+                    'code': parts[0],
+                    'name': parts[1],
+                    'category': parts[2],
+                    'price': parts[3],
+                    'rate': parts[4],
+                    'status': parts[5]
+                })
+
+def max_len(name):
     lens = 0
-    for menu_names, items in menus.items():
-        for item in items:
-            if len(item[name]) > lens:
-                lens = len(item[name])
-            else:
-                continue
-    return " " * (((lens - len(product))) + 4)
+    for menu_name, items in menus.items():
+        for menu in menu_name:
+            for item in items:
+                if len(item[name]) > lens:
+                    lens = len(item[name])
+                else:
+                    continue
+    return lens
+
+def title():
+    print(f"|" + "-" * (max_len('code') + 2) + "|" + "-" * (max_len('name') + 2) + "|" + "-" * (max_len('category') + 2) + "|" + "-" * 9 + "|" + "-" * 7 + "|" + "-" * (max_len('status') + 2) + "|")
+    print(f"|" + "Code".center(max_len('code') + 2) + "|" + "Name".center(max_len('name') + 2) + "|" + "Category".center(max_len('category') + 2) + "|" + "Price".center(9) + "|" + "Rate".center(7) + "|" + "Status".center(max_len('status') + 2) + "|")
+    print(f"|" + "-" * (max_len('code') + 2) + "|" + "-" * (max_len('name') + 2) + "|" + "-" * (max_len('category') + 2) + "|" + "-" * 9 + "|" + "-" * 7 + "|" + "-" * (max_len('status') + 2) + "|")
+
+def titles(a): 
+    print("|" + f"-" * (max_len('code') + max_len('name') + max_len('category') + max_len('status') + 29) + "|")
+    print("|" + f"Menu{a}".center((max_len('code') + max_len('name') + max_len('category') + max_len('status') + 29)) + "|")
+    print("|" + f"-" * (max_len('code') + max_len('name') + max_len('category') + max_len('status') + 29) + "|")
 
 def option1():
     while True:
@@ -100,7 +110,7 @@ def option2():
         if option2 not in ["1", "2", "3"]:
             print("Please select a number 1 or 2 or 3.")
         elif option2 == "1":
-            order_item()
+            order_item("2")
             return
         elif option2 == "2":
             back_to_menu("5")
@@ -109,74 +119,85 @@ def option2():
             back_to_menu("1")
             return
 
-def item_code_list(a):
+def item_code_list(a): # to print out available item in a
     global code_list
-    code_list = []
+    titles(a)
+    title()
+    code_list = [] # to empty the code_list
     for menu_name, items in menus.items():
         if menu_name == a:
             for item in items:
                 if item["status"] == "Available":
-                    code_list.append(item["code"])
-                    print(f"{item['code']}\t  {item['name']}{aline(item['name'], 'name')}{item['category']}{aline(item['category'], 'category')}{item['price']}\t  {item['rate']}\t{item['status']}")
+                    code_list.append(item["code"]) # to add available item code into code_list
+                    print("|" + f"{item['code']}".center(max_len('code') + 2) + "|" + f"{item['name']}".center(max_len('name') + 2) + "|" + f"{item['category']}".center(max_len('category') + 2) + "|" + f"{item['price']}".center(9) + "|" + f"{item['rate']}".center(7) + "|" + f"{item['status']}".center(max_len('status') + 2) + "|")
+    print()
 
-def price_sort(a):
+def price_sort(a): # a is to decide the price amount sort from big to small or small to big
     print()
     if a == "1":
         a = False
     elif a == "2":
         a = True
     for menu_name, items in menus.items():
-        print(f"menu {menu_name}")
+        titles(menu_name)
+        title()
         sorted_items = sorted(items, key=lambda x: int(x["price"]), reverse = a)
         for item in sorted_items:
-            print(f"{item['code']}\t  {item['name']}{aline(item['name'], 'name')}{item['category']}{aline(item['category'], 'category')}{item['price']}\t  {item['rate']}\t{item['status']}")
+            print("|" + f"{item['code']}".center(max_len('code') + 2) + "|" + f"{item['name']}".center(max_len('name') + 2) + "|" + f"{item['category']}".center(max_len('category') + 2) + "|" + f"{item['price']}".center(9) + "|" + f"{item['rate']}".center(7) + "|" + f"{item['status']}".center(max_len('status') + 2) + "|")
+    print()
 
-def rate_sort(a):
+def rate_sort(a): # a is to decide the price amount sort from big to small or small to big
     print()
     if a == "1":
         a = False
     elif a == "2":
         a = True
     for menu_name, items in menus.items():
-        print(f"menu {menu_name}")
+        titles(menu_name)
+        title()
         sorted_items = sorted(items, key=lambda x: int(x["rate"]), reverse = a)
         for item in sorted_items:
-            print(f"{item['code']}\t  {item['name']}{aline(item['name'], 'name')}{item['category']}{aline(item['category'], 'category')}{item['price']}\t  {item['rate']}\t{item['status']}")
+            print("|" + f"{item['code']}".center(max_len('code') + 2) + "|" + f"{item['name']}".center(max_len('name') + 2) + "|" + f"{item['category']}".center(max_len('category') + 2) + "|" + f"{item['price']}".center(9) + "|" + f"{item['rate']}".center(7) + "|" + f"{item['status']}".center(max_len('status') + 2) + "|")
+    print()
 
-def category(a):
+def category(a): # a is to decide the which category
+    title()
     for menu_name, items in menus.items():
         for item in items:
             if item["category"] == a:
-                print(f"{item['code']}\t{item['name']}{aline(item['name'], 'name')}{item['category']}{aline(item['category'], 'category')}{item['price']}\t  {item['rate']}\t{item['status']}")
+                print("|" + f"{item['code']}".center(max_len('code') + 2) + "|" + f"{item['name']}".center(max_len('name') + 2) + "|" + f"{item['category']}".center(max_len('category') + 2) + "|" + f"{item['price']}".center(9) + "|" + f"{item['rate']}".center(7) + "|" + f"{item['status']}".center(max_len('status') + 2) + "|")
+    print()
 
-def print_out_menu(A):
+def print_out_menu(a):
     for menu_name, items in menus.items():
-        if menu_name == A:
-            print(f"menu {A}")
+        if menu_name == a:
+            titles(a)
+            title()
             for item in items:
-                print(f"{item['code']}\t  {item['name']}{aline(item['name'], 'name')}{item['category']}{aline(item['category'], 'category')}{item['price']}\t  {item['rate']}\t{item['status']}")
+                print("|" + f"{item['code']}".center(max_len('code') + 2) + "|" + f"{item['name']}".center(max_len('name') + 2) + "|" + f"{item['category']}".center(max_len('category') + 2) + "|" + f"{item['price']}".center(9) + "|" + f"{item['rate']}".center(7) + "|" + f"{item['status']}".center(max_len('status') + 2) + "|")
+    
 
-def print_w_menu(A):
+def print_w_menu(a): # use "w" to rewrite the menu in product.txt 
     for menu_name, items in menus.items():
-        if menu_name == A:
+        if menu_name == a:
             with open("product.txt", "w") as file:
-                file.write(f"menu {A}\n")
+                file.write(f"menu {a}\n")
             for item in items:
                 with open("product.txt", "a") as file:
                     file.write(f"{item["code"]},{item["name"]},{item["category"]},{item["price"]},{item['rate']},{item["status"]}\n")
 
-def print_a_menu(A):
+def print_a_menu(a): # use "a" to add the menu in product.txt
     for menu_name, items in menus.items():
-        if menu_name == A:
+        if menu_name == a:
             with open("product.txt", "a") as file:
-                file.write(f"menu {A}\n")
+                file.write(f"menu {a}\n")
             for item in items:
                 with open("product.txt", "a") as file:
                     file.write(f"{item["code"]},{item["name"]},{item["category"]},{item["price"]},{item['rate']},{item["status"]}\n")
 
 def inventory_management():
     print("\nPlease select features.") # put menu or anything else will better ? ? ?
-    print("1) View update blooms")
+    print("1) View/update blooms")
     print("2) Add new blooms")
     print("3) View/update add on")
     print("4) Add new add on")
@@ -209,43 +230,40 @@ def update_rate():
     global menus
     
     while True:
-        update_code = input("\nPlease enter the item code that you want to update or enter 0 to go back: ")
+        update_code = input("\nPlease enter the item code that you want to update or enter 0 to go back: ").upper()
         
         found = False
         for menu_name, items in menus.items():
-            if menu_name == "A":
-                for item in items:
-                    if update_code == "0":
-                        back_to_menu("2")
-                        found = True
-                        return
-                    elif update_code == item['code']:
-                        found = True
-                        print(f"{item["code"]}\t{item['name']}\t{item['category']}\t{item['price']}\t  {item['rate']}\t{item['status']}")
-                        
-                        while True:
-                            new_info = input("Enter new (code,name,category,price,rate,status): ").title().split(',')
-                            if len(new_info) == 6:
-                                item['code'] = new_info[0]
-                                item['name'] = new_info[1]
-                                item['category'] = new_info[2]
-                                item['price'] = new_info[3]
-                                item['rate'] = new_info[4]
-                                item['status'] = new_info[5]
-                                
-                                print_w_menu("A")
-                                print_a_menu("B")
-                                print("Update successful!\n")
-                                print_out_menu("A")
-                                print_out_menu("B")
-                                print()
-                                back_to_menu("1")
-                                return
-                            else:
-                                continue
+            for item in items:
+                if update_code == "0":
+                    back_to_menu("2")
+                    found = True
+                    return
+                elif update_code == item['code']:
+                    found = True
+                    print(f"{item["code"]}\t{item['name']}\t{item['category']}\t{item['price']}\t  {item['rate']}\t{item['status']}")
+                    
+                    while True:
+                        new_info = input("Enter new (code,name,category,price,rate,status): ").title().split(',')
+                        if len(new_info) == 6:
+                            item['code'] = new_info[0]
+                            item['name'] = new_info[1]
+                            item['category'] = new_info[2]
+                            item['price'] = new_info[3]
+                            item['rate'] = new_info[4]
+                            item['status'] = new_info[5]
+                            
+                            print_w_menu("A")
+                            print_a_menu("B")
+                            print("Update successful!\n")
+                            print_out_menu("A")
+                            print_out_menu("B")
+                            print()
+                            back_to_menu("1")
+                            return
+                        else:
+                            continue
 
-            else:
-                continue
         if found:
             break
         else:
@@ -255,7 +273,7 @@ def view_update_blooms():
     global menus
     
     while True:
-        update_code = input("\nPlease enter the item code that you want to update or enter 0 to go back: ")
+        update_code = input("\nPlease enter the item code that you want to update or enter 0 to go back: ").upper()
         
         found = False
         for menu_name, items in menus.items():
@@ -272,7 +290,7 @@ def view_update_blooms():
                         while True:
                             new_info = input("Enter new (code,name,category,price,rate,status): ").title().split(',')
                             if len(new_info) == 6:
-                                item['code'] = new_info[0]
+                                item['code'] = new_info[0].upper()
                                 item['name'] = new_info[1]
                                 item['category'] = new_info[2]
                                 item['price'] = new_info[3]
@@ -293,31 +311,65 @@ def view_update_blooms():
             else:
                 continue
         if found:
-            break
+            return
         else:
             print("Invalid item code, please enter a valid item code.")
 
+def ref(a): # to give a recomment item code if when user add new item and the item code is repeated
+    print("\nItem code repeated, please use another item code.")
+    item_code = []
+    letter = ""
+    number = 0
+    for menu_name, items in menus.items():
+        for item in items:
+            item_code.append(item["code"])
+
+    for Item in item_code:
+        if Item[0] == a[0]:
+            if Item[0] == "A" and Item[1] == "D" and Item[2] == "D":
+                print(f"{Item}")
+                letter = Item[0:3]
+                number = int(Item[3:])
+            elif Item[0] != "G" and Item[1] != "O" and a[0] != "G" and a[1] != "O":
+                print(f"{Item}")
+                letter = Item[0]
+                number = int(Item[1:])
+            elif Item[0] == "G" and Item[1] == "O" and a[0] == "G" and a[1] == "O":
+                print(f"{Item}")
+                letter = Item[0:2]
+                number = int(Item[2:])
+    number += 1 
+    print(f"Do you mean {letter}{number:03d}?")
+
 def add_new_blooms():
+    item_codes = []
+    for menu_name, items in menus.items():
+        if menu_name == "A":
+            for item in items:
+                item_codes.append(item["code"])
     while True:
         new_bloom = input("\nPlease enter new blooms details in format (item code,item name,category,price,rate,status) or 0 to go back.\n").title()
         if new_bloom == "0":
             back_to_menu("2")
             return 
-        
-        new_bloom.split(",")
-        if len(new_bloom) == 5:
-            new_bloom = {
-                "code" : new_bloom[0],
-                "name" : new_bloom[1],
-                "category" : new_bloom[2],
-                "price" : new_bloom[3],
-                "rate" : new_bloom[4],
-                "status" : new_bloom[5],
-            }
-            menus["A"].append(new_bloom)
-            break
         else:
-            continue
+            new_bloom = new_bloom.split(",")
+            if len(new_bloom) == 6:
+                new_bloom = {
+                    "code" : new_bloom[0].upper(),
+                    "name" : new_bloom[1],
+                    "category" : new_bloom[2],
+                    "price" : new_bloom[3],
+                    "rate" : new_bloom[4],
+                    "status" : new_bloom[5],
+                }
+                if new_bloom["code"] in item_codes:
+                    ref(new_bloom["code"]) # to give a recomment item code if when user add new item and the item code is repeated
+                else:
+                    menus["A"].append(new_bloom)
+                    break
+            else:
+                continue
 
     print()
     print_w_menu("A")
@@ -331,7 +383,7 @@ def view_update_addon():
     global menus
     
     while True:
-        update_code = input("\nPlease enter the item code that you want to update or 0 to go back: ")
+        update_code = input("\nPlease enter the add on item code that you want to update or 0 to go back: ").upper()
         
         found = False
         for menu_name, items in menus.items():
@@ -347,8 +399,8 @@ def view_update_addon():
                         
                         while True:
                             new_info = input("Enter new (code,name,category,price,rate,status): ").title().split(',')
-                            if len(new_info) == 5:
-                                item['code'] = new_info[0]
+                            if len(new_info) == 6:
+                                item['code'] = new_info[0].upper()
                                 item['name'] = new_info[1]
                                 item['category'] = new_info[2]
                                 item['price'] = new_info[3]
@@ -368,30 +420,39 @@ def view_update_addon():
             else:
                 continue
         if found:
-            break
+            return
         else:
             print("Invalid item code, please enter a valid item code.")
 
 def add_new_addon():
+    item_codes = []
+    for menu_name, items in menus.items():
+        if menu_name == "B":
+            for item in items:
+                item_codes.append(item["code"])
     while True:
         new_addon = input("\nPlease enter new add on details in format (item code,item name,category,price,rate,status) or 0 to go back.\n").title()
         if new_addon == "0":
             back_to_menu("2")
             return
-        new_addon.split(",")
-        if len(new_addon) == 6:
-            new_addon = {
-                "code" : new_addon[0],
-                "name" : new_addon[1],
-                "category" : new_addon[2],
-                "price" : new_addon[3],
-                "rate" : new_addon[4],
-                "status" : new_addon[5],
-            }
-            menus["B"].append(new_addon)
-            break
         else:
-            continue
+            new_addon = new_addon.split(",")
+            if len(new_addon) == 6:
+                new_addon = {
+                    "code" : new_addon[0].upper(),
+                    "name" : new_addon[1],
+                    "category" : new_addon[2],
+                    "price" : new_addon[3],
+                    "rate" : new_addon[4],
+                    "status" : new_addon[5],
+                }
+                if new_addon["code"] in item_codes:
+                    ref(new_addon["code"]) # to give a recomment item code if when user add new item and the item code is repeated
+                else:
+                    menus["B"].append(new_addon)
+                    break
+            else:
+                continue
         
     print()
     print_w_menu("A")
@@ -401,7 +462,7 @@ def add_new_addon():
     print()
     back_to_menu("1")
 
-def back_to_menu(a):
+def back_to_menu(a): # a is to choose go back to which menu
     if a == "1":
         print("\nPlease select features.") # put menu or anything else will better? ? ?
         print("1) Inventory management")
@@ -484,7 +545,7 @@ def create_order():
             print("6) Go back to previous page")
             print("7) Back to main menu")
             option1()
-            break
+            return
         elif option == "2":
             print("\nPlease select features.") # put menu or anything else will better ? ? ?
             print("1) Cheapest to most expensive")
@@ -580,10 +641,10 @@ def create_order():
 
 def edit_order():
     while True:
-        code = input("Please enter a order code or 0 to go back: ")
+        code = input("\nPlease enter a order code to edit order or 0 to go back: ")
         if code == "0":
             view_order()
-            break
+            return
         found = False
         for codes in order_code:
             if code == codes["code"]:
@@ -592,44 +653,58 @@ def edit_order():
                     print()
                     print("1) Yes")
                     print("2) No")
-                    print("Current status is Cancelled, want change to preparing?\nPlease select 1 or 2. ")
+                    print("Current status is Cancelled, want change to open?\nPlease select 1 or 2. ")
                     while True:
                         ans = input("Number: ")
                         if ans not in ["1", "2"]:
                             print("Please select a number 1 or 2.")
                         if ans == "1":
-                            codes["status"] = "Preparing"
+                            codes["status"] = "Open"
                             view_order()
-                            break
+                            return
                         else:
-                            break
-                    break
-                elif codes["status"] == "Preparing":
+                            return
+                elif codes["status"] == "Open":
                     print()
-                    print("1) Ready")
+                    print("1) Preparing")
                     print("2) Cancelled")
                     print("3) Go Back")
-                    print("Current status is Cancelled, want change to ready or cancelled?\nPlease select 1 or 2. ")
+                    print("Current status is Preparing, want change to ready or cancelled?\nPlease select 1 or 2 or 3. ")
                     while True:
                         ans = input("Number: ")
                         if ans not in ["1", "2", "3"]:
                             print("Please select a number 1 or 2 or 3.")
                         if ans == "1":
-                            codes["status"] = "Ready"
+                            codes["status"] = "Preparing"
                             view_order()
-                            break
+                            return
                         elif ans == "2":
                             codes["status"] = "Cancelled"
                             view_order()
+                            return
                         else:
-                            break
-                    break
+                            return
+                elif codes["status"] == "Preparing":
+                    print()
+                    print("1) Ready")
+                    print("2) Go Back")
+                    print("Current status is Preparing, want change to ready or cancelled?\nPlease select 1 or 2. ")
+                    while True:
+                        ans = input("Number: ")
+                        if ans not in ["1", "2"]:
+                            print("Please select a number 1 or 2 or 3.")
+                        if ans == "1":
+                            codes["status"] = "Ready"
+                            view_order()
+                            return
+                        else:
+                            return
                 elif codes["status"] == "Ready":
                     print()
                     print("1) Preparing")
                     print("2) Closed")
                     print("3) Go Back")
-                    print("Current status is Cancelled, want change to preparing or closed?\nPlease select 1 or 2. ")
+                    print("Current status is Ready, want change to preparing or closed?\nPlease select 1 or 2. ")
                     while True:
                         ans = input("Number: ")
                         if ans not in ["1", "2", "3"]:
@@ -637,14 +712,13 @@ def edit_order():
                         if ans == "1":
                             codes["status"] = "Preparing"
                             view_order()
-                            break
+                            return
                         elif ans == "2":
                             codes["status"] = "Closed"
                             view_order()
-                            break
+                            return
                         else:
-                            break
-                    break
+                            return
                 elif codes["status"] == "Closed":
                     print()
                     print("Current status is Closed, can't change status?\nPlease enter 1 to continue. ")
@@ -654,15 +728,14 @@ def edit_order():
                             print("Current status is Closed, can't change status?\nPlease enter 1 to continue.")
                         else:
                             view_order()
-                            break
-                    break
+                            return
         if not found:
             print("Please enter a valid order code.")
         else:
-            break
+            return
 
 def view_order():
-    global detail, order_code
+    global detail, order_code,ordered_item_code
     for code in order_code:
         print(f"{code["code"]}\t{code["status"]}")
     print()
@@ -677,6 +750,7 @@ def view_order():
             print("Please enter numer 1 or 2 or 3 or 4 or 5.")
         elif option == "1":
             edit_order()
+            return
         elif option == "2":
             print()
             print("1) Preparing")
@@ -694,35 +768,35 @@ def view_order():
                         if code_stutus["status"] == "Preparing":
                             print(f"{code_stutus["code"]}\t{code_stutus["status"]}")
                     edit_order()
-                    break
+                    return
                 elif status == "2":
                     print()
                     for code_stutus in order_code:
                         if code_stutus["status"] == "Ready":
                             print(f"{code_stutus["code"]}\t{code_stutus["status"]}")
                     edit_order()
-                    break
+                    return
                 elif status == "3":
                     print()
                     for code_stutus in order_code:
                         if code_stutus["status"] == "Cancelled":
                             print(f"{code_stutus["code"]}\t{code_stutus["status"]}")
                     edit_order()
-                    break
+                    return
                 elif status == "4":
                     for code_stutus in order_code:
                         print()
                         if code_stutus["status"] == "Closed":
                             print(f"{code_stutus["code"]}\t{code_stutus["status"]}")
                     edit_order()
-                    break
+                    return
                 else:
                     view_order()
-            break
+                    return
         elif option == "3":
             while True:
                 print()
-                codes = input("Please enter a order code you want to check or 0 to go back: ")
+                codes = input("Please enter a order code you want to check or 0 to go back: ").upper()
                 if codes == "0":
                     view_order()
                     return
@@ -732,8 +806,10 @@ def view_order():
                             continue
                         else:
                             print()
+                            print(f"Order item:            {', '.join(detail[codes]['order item'])}")
                             print(f"Delivery date:         {detail[codes]["delivery date"]}")
                             print(f"Same day delivery:     {detail[codes]['Same day delivery'][0]}, ${detail[code["code"]]['Same day delivery'][1]}")
+                            print(f"Weekend delivery:      {detail[codes]["Weekend delivery"]}")
                             print(f"Delivery charge:       {detail[codes]["delivery charge"]}")
                             print(f"Total:                 {detail[codes]["total"]}")
                             print(f"Customer name:         {detail[codes]["customer name"]}")
@@ -747,27 +823,33 @@ def view_order():
             back_to_menu("1")
             return
 
-def generate_order_code():
+def generate_order_code(): # to auto generate order code with using format BBO-23-XXXX, XXXX is a number, this funtion will auto add 1 when new order created
     if order_code == []:
         return "BBO-23-0001"
     else:
         last_code = order_code[-1]
-        num = int(last_code["code"].split("-")[-1]) + 1 
-        return f"BBO-23-{num:04d}"
+        number = int(last_code["code"].split("-")[-1]) + 1 
+        return f"BBO-23-{number:04d}"
 
-def order_summarys():
+def order_summarys(): # to print out the order item in order_summary
     global order_summary
+    title()
     for item in order_summary:
-        print(f"{item['code']}\t  {item['name']}{aline(item['name'], 'name')}{item['category']}{aline(item['category'], 'category')}{item['price']}")
+        print("|" + f"{item['code']}".center(max_len('code') + 2) + "|" + f"{item['name']}".center(max_len('name') + 2) + "|" + f"{item['category']}".center(max_len('category') + 2) + "|" + f"{item['price']}".center(9) + "|" + f"{item['rate']}".center(7) + "|" + f"{item['status']}".center(max_len('status') + 2) + "|")
 
-def order_item(s):
-    global code_list, order_summary, menus, total, order_code
+def order_item(s): # is s != 1, then will skip print available item
+    global code_list, order_summary, menus, total, order_code, ordered_item_code
     order_summary = []
+    ordered_item_code = []
     while True:
         print()
         if s == "1":
-            item_code_list("A")
-        order = input("Please enter the item code or 9 to finish order or 0 to go back: ")
+            item_code_list("A") # to print out available item in menu "A"
+        for menu_name, items in menus.items():
+            for item in items:
+                if item["status"] == "Available":
+                    code_list.append(item["code"])
+        order = input("Please enter the item code or 9 to finish order or 0 to go back: ").upper()
         if order not in code_list and order != "9" and order != "0":
             print("Please enter a valid item code")
         elif order == "9":
@@ -781,12 +863,13 @@ def order_item(s):
                     for item in items:
                         if order == item["code"]:
                             order_summary.append(item)
+                            ordered_item_code.append(item["code"])
                             total += int(item["price"])
                             print()
                             print("Add on:")
-                            item_code_list("B")
+                            item_code_list("B") # to print out available item in menu "B"
                             while True:
-                                order = input("Please enter the add on item code or 0 to skip: ")
+                                order = input("Please enter the add on item code or 0 to skip: ").upper()
                                 if order not in code_list and order != "0":
                                     print("Please enter a valid add on item code")
                                 elif order == "0":
@@ -797,13 +880,14 @@ def order_item(s):
                                             for item in items:
                                                 if order == item["code"]:
                                                     order_summary.append(item)
+                                                    ordered_item_code.append(item["code"])
                                                     total += int(item["price"])
     print()
     customer_name = input("Please enter customer name: ")
     recipient_name = input("Please enter recipient's name: ")
     while True:
         message = input("Please enter message for recipient (max 300 character): ")
-        if len(message) <= 300:
+        if len(message) <= 300: # to make sure the message is not longer than 300 charcater
             break
         else:
             continue
@@ -826,18 +910,18 @@ def order_item(s):
             address = "Recipient pick up"
             break
         elif collect == "3":
-            address = input("Please enter delivery address: \n")
+            address = input("Please enter delivery address:\n")
             while True:
-                date = input("Please enter delivery date and time(eg: 2025-10-05 14:59)(delivery charge $35, same day delivery charge extra $35):\n")
+                date = input("Please enter delivery date and time(eg: 2025-10-13 14:59)(delivery charge $35, same day delivery charge extra $35):\n")
                 try:
-                    date_format = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M")
-                    if date_format.date() == datetime.date.today():
+                    date_format = datetime.datetime.strptime(date, "%Y-%m-%d %H:%M") # to make sure the date is yyyy-mm-dd hh:mm
+                    if date_format.date() == datetime.date.today(): # check the date user input is today date or not
                         sameday = "YES"
                     else:
                         sameday = "NO"
                     break
                 except ValueError:
-                    print("Invalid format, please enter a date time in this format (eg: 15-Oct-2025 14:59)")
+                    print("Invalid format, please enter a date time in this format (eg: 2025-10-13 14:59)")
             break
     
     print("\nOrder Summary")
@@ -853,9 +937,12 @@ def order_item(s):
     if sameday == "YES":
         samedayfee += 35
         total += 35
-    if date_format.weekday() >= 5:
-        weekend = 10
-        total += 10
+    if date_format == "Customer pick up" or date_format == "Recipient pick up":
+        pass
+    else:
+        if date_format.weekday() >= 5:
+            weekend = 10
+            total += 10
     print("Same day delivery    :", samedayfee)
     print("Weekend delivery     :", weekend)
     print("Delivery charge      :", fee)
@@ -874,10 +961,12 @@ def order_item(s):
             print("Please select a number '1' or '2' or '3'.")
         elif cfm == "1":
             new_order_code = generate_order_code()
-            order_code.append({"code":new_order_code, "status": "Preparing"})
+            order_code.append({"code":new_order_code, "status": "Open"})
             detail[new_order_code] = {
+                "order item": ordered_item_code,
                 "delivery date": date_format,
                 "Same day delivery": [sameday,samedayfee],
+                "Weekend delivery": weekend,
                 "delivery charge": fee,
                 "total":total,
                 "customer name":customer_name,
@@ -895,6 +984,7 @@ def order_item(s):
             new_order_code = generate_order_code()
             order_code.append({"code":new_order_code, "status": "preparing"})
             detail[new_order_code] = {
+                "order item": ordered_item_code,
                 "delivery date": date_format,
                 "Same day delivery": [sameday,samedayfee],
                 "delivery charge": fee,
@@ -923,12 +1013,12 @@ def main():
             print("Please enter 1 or 2 or 3. ")
         elif option == "1":
             inventory_management()
-            break
+            return
         elif option == "2":
             sale_management()
-            break
+            return
         else:
-            break
+            return
 
 
 main()
