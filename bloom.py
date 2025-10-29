@@ -49,7 +49,11 @@ def title():
 
 def titles(a): 
     print("|" + f"-" * (max_len('code') + max_len('name') + max_len('category') + max_len('status') + 29) + "|")
-    print("|" + f"Menu{a}".center((max_len('code') + max_len('name') + max_len('category') + max_len('status') + 29)) + "|")
+    if a == "A":
+        a = "Menu A"
+    else:
+        a = "Add On"
+    print("|" + f"{a}".center((max_len('code') + max_len('name') + max_len('category') + max_len('status') + 29)) + "|")
     print("|" + f"-" * (max_len('code') + max_len('name') + max_len('category') + max_len('status') + 29) + "|")
 
 def option1():
@@ -58,49 +62,56 @@ def option1():
         if option1 not in ["1", "2", "3", "4", "5", "6", "7"]:
             print("Please select a category number: ")
         elif option1 == "1":
+            print("_" * 150)
             print()
             category("Romantic")
-            print("\n1) Order item")
+            print("1) Order item")
             print("2) Back to filter category")
             print("3) Back to main menu")
             option2()                     
             return
         elif option1 == "2":
+            print("_" * 150)
             print()
             category("Birthday")
-            print("\n1) Order item")
+            print("1) Order item")
             print("2) Back to filter category")
             print("3) Back to main menu")
             option2()
             return
         elif option1 == "3":
+            print("_" * 150)
             print()
             category("Grand Openning")
-            print("\n1) Order item")
+            print("1) Order item")
             print("2) Back to filter category")
             print("3) Back to main menu")
             option2()
             return
         elif option1 == "4":
+            print("_" * 150)
             print()
             category("Condolence")
-            print("\n1) Order item")
+            print("1) Order item")
             print("2) Back to filter category")
             print("3) Back to main menu")
             option2()
             return
         elif option1 == "5":
+            print("_" * 150)
             print()
             category("Anniversary")
-            print("\n1) Order item")
+            print("1) Order item")
             print("2) Back to filter category")
             print("3) Back to main menu")
             option2()
             return
         elif option1 == "6":
+            print("_" * 150)
             back_to_menu("4")
             return
         else: 
+            print("_" * 150)
             back_to_menu("1")
             return
 
@@ -116,6 +127,7 @@ def option2():
             back_to_menu("5")
             return
         elif option2 == "3":
+            print("_" * 150)
             back_to_menu("1")
             return
 
@@ -144,7 +156,6 @@ def price_sort(a): # a is to decide the price amount sort from big to small or s
         sorted_items = sorted(items, key=lambda x: int(x["price"]), reverse = a)
         for item in sorted_items:
             print("|" + f"{item['code']}".center(max_len('code') + 2) + "|" + f"{item['name']}".center(max_len('name') + 2) + "|" + f"{item['category']}".center(max_len('category') + 2) + "|" + f"{item['price']}".center(9) + "|" + f"{item['rate']}".center(7) + "|" + f"{item['status']}".center(max_len('status') + 2) + "|")
-    print()
 
 def rate_sort(a): # a is to decide the price amount sort from big to small or small to big
     print()
@@ -158,7 +169,6 @@ def rate_sort(a): # a is to decide the price amount sort from big to small or sm
         sorted_items = sorted(items, key=lambda x: int(x["rate"]), reverse = a)
         for item in sorted_items:
             print("|" + f"{item['code']}".center(max_len('code') + 2) + "|" + f"{item['name']}".center(max_len('name') + 2) + "|" + f"{item['category']}".center(max_len('category') + 2) + "|" + f"{item['price']}".center(9) + "|" + f"{item['rate']}".center(7) + "|" + f"{item['status']}".center(max_len('status') + 2) + "|")
-    print()
 
 def category(a): # a is to decide the which category
     title()
@@ -208,21 +218,27 @@ def inventory_management():
         if option not in ["1", "2", "3", "4", "5", "6"]: 
             print("Please enter 1 or 2 or 3 or 4 or 5 or 6.")
         elif option == "1":
+            print("_" * 150)
             view_update_blooms()
             return
         elif option == "2":
+            print("_" * 150)
             add_new_blooms()
             return
         elif option == "3":
+            print("_" * 150)
             view_update_addon()
             return
         elif option == "4":
+            print("_" * 150)
             add_new_addon()
             return
         elif option == "5":
+            print("_" * 150)
             update_rate()
             return
         else: 
+            print("_" * 150)
             back_to_menu("1")
             return
 
@@ -255,10 +271,11 @@ def update_rate():
                             
                             print_w_menu("A")
                             print_a_menu("B")
-                            print("Update successful!\n")
+                            print("\nUpdate successful!\n")
                             print_out_menu("A")
                             print_out_menu("B")
                             print()
+                            print("_" * 150)
                             back_to_menu("1")
                             return
                         else:
@@ -274,7 +291,7 @@ def view_update_blooms():
     
     while True:
         update_code = input("\nPlease enter the item code that you want to update or enter 0 to go back: ").upper()
-        
+
         found = False
         for menu_name, items in menus.items():
             if menu_name == "A":
@@ -299,10 +316,11 @@ def view_update_blooms():
                                 
                                 print_w_menu("A")
                                 print_a_menu("B")
-                                print("Update successful!\n")
+                                print("\nUpdate successful!\n")
                                 print_out_menu("A")
                                 print_out_menu("B")
                                 print()
+                                print("_" * 150)
                                 back_to_menu("1")
                                 return
                             else:
@@ -340,6 +358,7 @@ def ref(a): # to give a recomment item code if when user add new item and the it
                 number = int(Item[2:])
     number += 1 
     print(f"Do you mean {letter}{number:03d}?")
+    print("_" * 150)
 
 def add_new_blooms():
     item_codes = []
@@ -374,9 +393,11 @@ def add_new_blooms():
     print()
     print_w_menu("A")
     print_a_menu("B")
+    print("Add successful!\n")
     print_out_menu("A") 
     print_out_menu("B")
     print()
+    print("_" * 150)
     back_to_menu("1")
 
 def view_update_addon():
@@ -409,10 +430,11 @@ def view_update_addon():
                                 
                                 print_w_menu("A")
                                 print_a_menu("B")
-                                print("Update successful!\n")
+                                print("\nUpdate successful!\n")
                                 print_out_menu("A")
                                 print_out_menu("B")
                                 print()
+                                print("_" * 150)
                                 back_to_menu("1")
                                 return
                             else:
@@ -457,9 +479,11 @@ def add_new_addon():
     print()
     print_w_menu("A")
     print_a_menu("B")
+    print("Add successful!\n")
     print_out_menu("A")
     print_out_menu("B")
     print()
+    print("_" * 150)
     back_to_menu("1")
 
 def back_to_menu(a): # a is to choose go back to which menu
@@ -473,23 +497,29 @@ def back_to_menu(a): # a is to choose go back to which menu
             if option not in ["1", "2", "3"]:
                 print("Please enter 1 or 2 or 3. ")
             elif option == "1":
+                print("_" * 150)
                 inventory_management()
                 return
             elif option == "2":
+                print("_" * 150)
                 sale_management()
                 return
             else:
                 return
     elif a == "2":
+        print("_" * 150)
         inventory_management()
         return
     elif a == "3":
+        print("_" * 150)
         sale_management()
         return
     elif a == "4":
+        print("_" * 150)
         create_order()
         return
     elif a == "5":
+        print("_" * 150)
         print("\nCategory:")
         print("1) Romantic")
         print("2) Birthday")
@@ -500,6 +530,9 @@ def back_to_menu(a): # a is to choose go back to which menu
         print("7) Back to main menu")
         option1()
         return
+    elif a == "6":
+        print("_" * 150)
+        edit_order()
 
 def sale_management():
     print("\nPlease select features.") # put menu or anything else will better ? ? ?
@@ -524,6 +557,7 @@ def create_order():
     print()
     print_out_menu("A")
     print_out_menu("B")
+    print("_" * 150)
     print("\nPlease select features.") # put menu or anything else will better ? ? ?
     print("1) Filter products by category")
     print("2) Sort products by price") 
@@ -536,6 +570,7 @@ def create_order():
         if option not in ["1", "2", "3", "4", "5", "6"]: 
             print("Please enter a number 1 or 2 or 3 or 4 or 5 or 6.")
         elif option == "1":
+            print("_" * 150)
             print("\nCategory:")
             print("1) Romantic")
             print("2) Birthday")
@@ -547,7 +582,8 @@ def create_order():
             option1()
             return
         elif option == "2":
-            print("\nPlease select features.") # put menu or anything else will better ? ? ?
+            print("_" * 150)
+            print("\nPlease select a number.") 
             print("1) Cheapest to most expensive")
             print("2) Most expensive to cheapest")
             print("3) Back to previous page")
@@ -558,8 +594,9 @@ def create_order():
                     print("Please select a number: ")
                 elif order == "1":
                     price_sort(order)
+                    print("_" * 150)
                     while True:
-                        continues = input("Continue create order? (y/n): ")
+                        continues = input("\nContinue create order? (y/n): ")
                         if continues not in ["y", "n"]:
                             print("Please enter y or n.")
                         elif continues == "y":
@@ -570,8 +607,9 @@ def create_order():
                             return
                 elif order == "2":
                     price_sort(order)
+                    print("_" * 150)
                     while True:
-                        continues = input("Continue create order? (y/n): ")
+                        continues = input("\nContinue create order? (y/n): ")
                         if continues not in ["y", "n"]:
                             print("Please enter y or n.")
                         elif continues == "y":
@@ -584,10 +622,11 @@ def create_order():
                     back_to_menu("4")
                     return
                 else:
+                    print("_" * 150)
                     back_to_menu("1")
                     return
         elif option == "3":
-            print()
+            print("_" * 150)
             print("\nPlease select features.") # put menu or anything else will better ? ? ?
             print("1) Rate from 1 - 5")
             print("2) Rate from 5 - 1")
@@ -599,6 +638,7 @@ def create_order():
                     print("Please select a number: ")
                 elif rate == "1":
                     rate_sort(rate)
+                    print("_" * 150)
                     while True:
                         print()
                         continues = input("Continue create order? (y/n): ")
@@ -630,18 +670,20 @@ def create_order():
                     back_to_menu("1")
                     return
         elif option == "4":
+            print("_" * 150)
             order_item("1")
             return
         elif option == "5":
             back_to_menu("3")
             return
         else:
+            print("_" * 150)
             back_to_menu("1")
             return
 
 def edit_order():
     while True:
-        code = input("\nPlease enter a order code to edit order or 0 to go back: ")
+        code = input("\nPlease enter a order code to edit order or 0 to go back: ").upper()
         if code == "0":
             view_order()
             return
@@ -660,9 +702,11 @@ def edit_order():
                             print("Please select a number 1 or 2.")
                         if ans == "1":
                             codes["status"] = "Open"
+                            detail[codes["code"]]["status"] = "Open"
                             view_order()
                             return
                         else:
+                            back_to_menu("6")
                             return
                 elif codes["status"] == "Open":
                     print()
@@ -676,13 +720,16 @@ def edit_order():
                             print("Please select a number 1 or 2 or 3.")
                         if ans == "1":
                             codes["status"] = "Preparing"
+                            detail[codes["code"]]["status"] = "Preparing"
                             view_order()
                             return
                         elif ans == "2":
                             codes["status"] = "Cancelled"
+                            detail[codes["code"]]["status"] = "Cancelled"
                             view_order()
                             return
                         else:
+                            back_to_menu("6")
                             return
                 elif codes["status"] == "Preparing":
                     print()
@@ -695,9 +742,11 @@ def edit_order():
                             print("Please select a number 1 or 2 or 3.")
                         if ans == "1":
                             codes["status"] = "Ready"
+                            detail[codes["code"]]["status"] = "Ready"
                             view_order()
                             return
                         else:
+                            back_to_menu("6")
                             return
                 elif codes["status"] == "Ready":
                     print()
@@ -711,13 +760,16 @@ def edit_order():
                             print("Please select a number 1 or 2 or 3.")
                         if ans == "1":
                             codes["status"] = "Preparing"
+                            detail[codes["code"]]["status"] = "Preparing"
                             view_order()
                             return
                         elif ans == "2":
                             codes["status"] = "Closed"
+                            detail[codes["code"]]["status"] = "Closed"
                             view_order()
                             return
                         else:
+                            back_to_menu("6")
                             return
                 elif codes["status"] == "Closed":
                     print()
@@ -736,9 +788,12 @@ def edit_order():
 
 def view_order():
     global detail, order_code,ordered_item_code
+    print("_" * 150)
+    print()
     for code in order_code:
         print(f"{code["code"]}\t{code["status"]}")
     print()
+    print("Please select a number.")
     print("1) Edit/Cancel order")
     print("2) Filter order by status")
     print("3) view order")
@@ -749,10 +804,12 @@ def view_order():
         if option not in ["1", "2", "3", "4", "5"]:
             print("Please enter numer 1 or 2 or 3 or 4 or 5.")
         elif option == "1":
+            print("_" * 150)
             edit_order()
             return
         elif option == "2":
-            print()
+            print("_" * 150)
+            print("\nPlease select a number.")
             print("1) Preparing")
             print("2) Ready")
             print("3) Cancelled")
@@ -795,8 +852,8 @@ def view_order():
                     return
         elif option == "3":
             while True:
-                print()
-                codes = input("Please enter a order code you want to check or 0 to go back: ").upper()
+                print("_" * 150)
+                codes = input("\nPlease enter a order code you want to check or 0 to go back: ").upper()
                 if codes == "0":
                     view_order()
                     return
@@ -807,6 +864,7 @@ def view_order():
                         else:
                             print()
                             print(f"Order item:            {', '.join(detail[codes]['order item'])}")
+                            print(f"Order status:          {detail[codes]["status"]}")
                             print(f"Delivery date:         {detail[codes]["delivery date"]}")
                             print(f"Same day delivery:     {detail[codes]['Same day delivery'][0]}, ${detail[code["code"]]['Same day delivery'][1]}")
                             print(f"Weekend delivery:      {detail[codes]["Weekend delivery"]}")
@@ -820,6 +878,7 @@ def view_order():
             back_to_menu("3")
             return
         else: 
+            print("_" * 150)
             back_to_menu("1")
             return
 
@@ -853,6 +912,7 @@ def order_item(s): # is s != 1, then will skip print available item
         if order not in code_list and order != "9" and order != "0":
             print("Please enter a valid item code")
         elif order == "9":
+            print("_" * 150)
             break
         elif order == "0":
             back_to_menu("4")
@@ -964,6 +1024,7 @@ def order_item(s): # is s != 1, then will skip print available item
             order_code.append({"code":new_order_code, "status": "Open"})
             detail[new_order_code] = {
                 "order item": ordered_item_code,
+                "status": order_code[-1]["status"],
                 "delivery date": date_format,
                 "Same day delivery": [sameday,samedayfee],
                 "Weekend delivery": weekend,
@@ -975,6 +1036,7 @@ def order_item(s): # is s != 1, then will skip print available item
                 "delivery address": address,
             }
             total = 0
+            print("_" * 150)
             back_to_menu("1")
             return
         elif cfm == "2":
@@ -985,6 +1047,7 @@ def order_item(s): # is s != 1, then will skip print available item
             order_code.append({"code":new_order_code, "status": "preparing"})
             detail[new_order_code] = {
                 "order item": ordered_item_code,
+                "status": order_code[-1]["status"],
                 "delivery date": date_format,
                 "Same day delivery": [sameday,samedayfee],
                 "delivery charge": fee,
@@ -995,9 +1058,11 @@ def order_item(s): # is s != 1, then will skip print available item
                 "delivery address": address,
             }
             total = 0
+            print("_" * 150)
             back_to_menu("1")
             return
         elif cfm == "3":
+            print("_" * 150)
             back_to_menu("4")
             return
 
@@ -1009,6 +1074,7 @@ def main():
     print("3) Quit the program.")
     while True:
         option = input("Please enter a number 1 or 2 or 3. ")
+        print("_" * 150)
         if option not in ["1", "2", "3"]:
             print("Please enter 1 or 2 or 3. ")
         elif option == "1":
