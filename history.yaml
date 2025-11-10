@@ -1,0 +1,94 @@
+Date: 2025-11-05
+Time: 14:35:26
+Order: BBO-25-0001
+order item: R001, ADD003
+status: Open
+delivery date: Customer pick up
+Same day delivery: NO, 0
+Weekend delivery: 0
+delivery charge: 0
+total: 138
+customer name: Jason
+recipient name: Jane Lim
+message for recipient: Happy Valentine's Day, Jane
+delivery address: Customer pick up
+
+Date: 2025-11-06
+Time: 17:31:26
+Order: BBO-25-0001
+order item: R001, ADD002
+status: Open
+delivery date: Customer pick up
+Same day delivery: NO, 0
+Weekend delivery: 0
+delivery charge: 0
+total: 138
+customer name: Jason
+recipient name: Jane
+message for recipient: Happy Valentine's Day, Jane
+delivery address: Customer pick up
+
+
+Date: 2025-11-06
+Time: 17:37:37
+Order: BBO-25-0002
+order item: B001, ADD005
+status: Open
+delivery date: Recipient pick up
+Same day delivery: NO, 0
+Weekend delivery: 0
+delivery charge: 0
+total: 123
+customer name: Jason
+recipient name: Christy
+message for recipient: Happy Birthday, Christy
+delivery address: Recipient pick up
+
+
+Date: 2025-11-06
+Time: 17:44:25
+Order: BBO-25-0003
+order item: A001, A002
+status: Open
+delivery date: 2025-11-06 17:00:00
+Same day delivery: YES, 35
+Weekend delivery: 0
+delivery charge: 35
+total: 386
+customer name: Jason
+recipient name: Jane
+message for recipient: Happy Anniversary, Jane
+delivery address: Blk 123, Street 456, #07-89, Singapore, 650123
+
+
+Date: 2025-11-06
+Time: 17:48:22
+Order: BBO-25-0004
+order item: GO001, ADD002
+status: Open
+delivery date: 2025-11-08 10:00:00
+Same day delivery: NO, 0
+Weekend delivery: 10
+delivery charge: 35
+total: 213
+customer name: Brandon
+recipient name: Jason
+message for recipient: Grand Opening
+delivery address: Blk 987, Street 654, #03-21, Singapore, 650321
+
+
+Date: 2025-11-07
+Time: 17:18:15
+Order: BBO-25-0001
+order item: R001, ADD002
+status: Open
+delivery date: Customer pick up
+Same day delivery: NO, 0
+Weekend delivery: 0
+delivery charge: 0
+total: 138
+customer name: J
+recipient name: SY
+message for recipient: 
+delivery address: Customer pick up
+
